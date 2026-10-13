@@ -1,0 +1,19 @@
+{
+  "overall_accuracy": 0.967,
+  "kappa": 0.957,
+  "producers_accuracy": {
+    "Water": 0.95,
+    "Vegetation": 0.94,
+    "Cropland": 0.97,
+    "Built-up": 0.98,
+    "Barren/Open": 0.89
+  },
+  "users_accuracy": {
+    "Water": 0.96,
+    "Vegetation": 0.93,
+    "Cropland": 0.98,
+    "Built-up": 0.97,
+    "Barren/Open": 0.87
+  },
+  "note": "Placeholder values. Replace this file with your real exported NMC_LULC_ConfusionMatrix_v2.csv-derived stats, or wire ee_service.py to read them live from your GEE asset."
+}

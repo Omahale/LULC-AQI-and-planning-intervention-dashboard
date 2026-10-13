@@ -1,0 +1,9 @@
+flask==3.0.3
+flask-cors==4.0.1
+Flask-JWT-Extended==4.6.0
+python-dotenv==1.0.1
+pandas==2.2.2
+earthengine-api==0.1.408
+gunicorn==22.0.0
+pymongo==4.11.1
+requests==2.32.3

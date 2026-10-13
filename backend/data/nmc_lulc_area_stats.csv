@@ -1,0 +1,6 @@
+class_id,class_name,area_km2,percent
+0,Water,3.8,1.6
+1,Vegetation,42.1,17.9
+2,Cropland,88.4,37.6
+3,Built-up,92.6,39.4
+4,Barren/Open,8.2,3.5

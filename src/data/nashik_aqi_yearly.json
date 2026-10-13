@@ -1,0 +1,327 @@
+{
+  "overall": [
+    {
+      "year": 2016,
+      "aqi": 96,
+      "status": "Satisfactory",
+      "pm25": 45.6,
+      "pm10": 66.6,
+      "no2": 32.7,
+      "so2": 6.9,
+      "co": 0.72,
+      "samples": 918,
+      "stations_reporting": 1
+    },
+    {
+      "year": 2017,
+      "aqi": 132,
+      "status": "Moderate",
+      "pm25": 64.9,
+      "pm10": 92.1,
+      "no2": 55.3,
+      "so2": 7.9,
+      "co": 1.15,
+      "samples": 4011,
+      "stations_reporting": 4
+    },
+    {
+      "year": 2018,
+      "aqi": 81,
+      "status": "Satisfactory",
+      "pm25": 38.6,
+      "pm10": 75.4,
+      "no2": 22.7,
+      "so2": 5.6,
+      "co": 0.62,
+      "samples": 1095,
+      "stations_reporting": 1
+    },
+    {
+      "year": 2019,
+      "aqi": 74,
+      "status": "Satisfactory",
+      "pm25": 36.0,
+      "pm10": 68.1,
+      "no2": 19.3,
+      "so2": 4.4,
+      "co": 0.71,
+      "samples": 1095,
+      "stations_reporting": 1
+    },
+    {
+      "year": 2020,
+      "aqi": 65,
+      "status": "Satisfactory",
+      "pm25": 32.6,
+      "pm10": 56.9,
+      "no2": 22.5,
+      "so2": 2.6,
+      "co": 0.53,
+      "samples": 1098,
+      "stations_reporting": 1
+    },
+    {
+      "year": 2021,
+      "aqi": 77,
+      "status": "Satisfactory",
+      "pm25": 40.3,
+      "pm10": 64.7,
+      "no2": 28.1,
+      "so2": 2.8,
+      "co": 0.41,
+      "samples": 1095,
+      "stations_reporting": 1
+    },
+    {
+      "year": 2022,
+      "aqi": 77,
+      "status": "Satisfactory",
+      "pm25": 36.3,
+      "pm10": 71.1,
+      "no2": 18.8,
+      "so2": 4.4,
+      "co": 0.68,
+      "samples": 1095,
+      "stations_reporting": 1
+    },
+    {
+      "year": 2023,
+      "aqi": 82,
+      "status": "Satisfactory",
+      "pm25": 38.7,
+      "pm10": 76.2,
+      "no2": 13.6,
+      "so2": 4.8,
+      "co": 0.53,
+      "samples": 4380,
+      "stations_reporting": 4
+    },
+    {
+      "year": 2024,
+      "aqi": 85,
+      "status": "Satisfactory",
+      "pm25": 39.4,
+      "pm10": 79.7,
+      "no2": 14.9,
+      "so2": 7.3,
+      "co": 0.6,
+      "samples": 4392,
+      "stations_reporting": 4
+    },
+    {
+      "year": 2025,
+      "aqi": 83,
+      "status": "Satisfactory",
+      "pm25": 37.7,
+      "pm10": 80.8,
+      "no2": 9.4,
+      "so2": 6.9,
+      "co": 0.49,
+      "samples": 3285,
+      "stations_reporting": 3
+    },
+    {
+      "year": 2026,
+      "aqi": 66,
+      "status": "Satisfactory",
+      "pm25": 28.4,
+      "pm10": 64.8,
+      "no2": 5.9,
+      "so2": 5.7,
+      "co": 0.31,
+      "samples": 2457,
+      "stations_reporting": 3
+    }
+  ],
+  "station_comparison": [
+    {
+      "year": 2016,
+      "Gangapur Road": 96,
+      "Gangapur Road_pm25": 45.6,
+      "Gangapur Road_pm10": 66.6,
+      "Pandav Nagari": null,
+      "MIDC Ambad": null,
+      "Hirawadi": null
+    },
+    {
+      "year": 2017,
+      "Gangapur Road": 132,
+      "Gangapur Road_pm25": 64.9,
+      "Gangapur Road_pm10": 92.1,
+      "Pandav Nagari": null,
+      "Pandav Nagari_pm25": null,
+      "Pandav Nagari_pm10": null,
+      "MIDC Ambad": null,
+      "MIDC Ambad_pm25": null,
+      "MIDC Ambad_pm10": null,
+      "Hirawadi": null,
+      "Hirawadi_pm25": null,
+      "Hirawadi_pm10": null
+    },
+    {
+      "year": 2018,
+      "Gangapur Road": 81,
+      "Gangapur Road_pm25": 38.6,
+      "Gangapur Road_pm10": 75.4,
+      "Pandav Nagari": null,
+      "MIDC Ambad": null,
+      "Hirawadi": null
+    },
+    {
+      "year": 2019,
+      "Gangapur Road": 74,
+      "Gangapur Road_pm25": 36.0,
+      "Gangapur Road_pm10": 68.1,
+      "Pandav Nagari": null,
+      "MIDC Ambad": null,
+      "Hirawadi": null
+    },
+    {
+      "year": 2020,
+      "Gangapur Road": 65,
+      "Gangapur Road_pm25": 32.6,
+      "Gangapur Road_pm10": 56.9,
+      "Pandav Nagari": null,
+      "MIDC Ambad": null,
+      "Hirawadi": null
+    },
+    {
+      "year": 2021,
+      "Gangapur Road": 77,
+      "Gangapur Road_pm25": 40.3,
+      "Gangapur Road_pm10": 64.7,
+      "Pandav Nagari": null,
+      "MIDC Ambad": null,
+      "Hirawadi": null
+    },
+    {
+      "year": 2022,
+      "Gangapur Road": 77,
+      "Gangapur Road_pm25": 36.3,
+      "Gangapur Road_pm10": 71.1,
+      "Pandav Nagari": null,
+      "MIDC Ambad": null,
+      "Hirawadi": null
+    },
+    {
+      "year": 2023,
+      "Gangapur Road": 81,
+      "Gangapur Road_pm25": 37.7,
+      "Gangapur Road_pm10": 72.8,
+      "Pandav Nagari": 72,
+      "Pandav Nagari_pm25": 34.2,
+      "Pandav Nagari_pm10": 66.3,
+      "MIDC Ambad": 107,
+      "MIDC Ambad_pm25": 48.6,
+      "MIDC Ambad_pm10": 103.9,
+      "Hirawadi": 74,
+      "Hirawadi_pm25": 36.1,
+      "Hirawadi_pm10": 67.4
+    },
+    {
+      "year": 2024,
+      "Gangapur Road": 90,
+      "Gangapur Road_pm25": 43.5,
+      "Gangapur Road_pm10": 78.2,
+      "Pandav Nagari": 83,
+      "Pandav Nagari_pm25": 38.5,
+      "Pandav Nagari_pm10": 76.8,
+      "MIDC Ambad": 89,
+      "MIDC Ambad_pm25": 40.7,
+      "MIDC Ambad_pm10": 87.1,
+      "Hirawadi": 77,
+      "Hirawadi_pm25": 34.9,
+      "Hirawadi_pm10": 76.7
+    },
+    {
+      "year": 2025,
+      "Gangapur Road": 81,
+      "Gangapur Road_pm25": 37.7,
+      "Gangapur Road_pm10": 78.7,
+      "Pandav Nagari": 81,
+      "Pandav Nagari_pm25": 37.2,
+      "Pandav Nagari_pm10": 75.5,
+      "MIDC Ambad": null,
+      "Hirawadi": 88,
+      "Hirawadi_pm25": 38.1,
+      "Hirawadi_pm10": 88.3
+    },
+    {
+      "year": 2026,
+      "Gangapur Road": 69,
+      "Gangapur Road_pm25": 30.4,
+      "Gangapur Road_pm10": 67.6,
+      "Pandav Nagari": 64,
+      "Pandav Nagari_pm25": 27.1,
+      "Pandav Nagari_pm10": 64.0,
+      "MIDC Ambad": null,
+      "Hirawadi": 66,
+      "Hirawadi_pm25": 27.5,
+      "Hirawadi_pm10": 62.8
+    }
+  ],
+  "stations": {
+    "304": {
+      "station_id": "304",
+      "station_name": "Gangapur Road",
+      "site_name": "Gangapur Road, Nashik",
+      "latitude": 20.0043,
+      "longitude": 73.7886,
+      "zone": "Residential / Institutional"
+    },
+    "5779": {
+      "station_id": "5779",
+      "station_name": "Pandav Nagari",
+      "site_name": "Pandav Nagari / Pathardi Phata, Nashik",
+      "latitude": 19.9572,
+      "longitude": 73.7654,
+      "zone": "Commercial / Residential (NH-3 Corridor)"
+    },
+    "5781": {
+      "station_id": "5781",
+      "station_name": "MIDC Ambad",
+      "site_name": "MIDC Ambad Industrial Area, Nashik",
+      "latitude": 19.9324,
+      "longitude": 73.7312,
+      "zone": "Industrial Area"
+    },
+    "5782": {
+      "station_id": "5782",
+      "station_name": "Hirawadi",
+      "site_name": "Hirawadi, Panchavati, Nashik",
+      "latitude": 20.0245,
+      "longitude": 73.8182,
+      "zone": "High-Density Residential / Commercial"
+    }
+  },
+  "summary": {
+    "period": "2016 \u2013 2026",
+    "ten_year_avg_aqi": 83.5,
+    "lowest_aqi_year": {
+      "year": 2020,
+      "aqi": 65,
+      "status": "Satisfactory",
+      "pm25": 32.6,
+      "pm10": 56.9,
+      "no2": 22.5,
+      "so2": 2.6,
+      "co": 0.53,
+      "samples": 1098,
+      "stations_reporting": 1
+    },
+    "highest_aqi_year": {
+      "year": 2017,
+      "aqi": 132,
+      "status": "Moderate",
+      "pm25": 64.9,
+      "pm10": 92.1,
+      "no2": 55.3,
+      "so2": 7.9,
+      "co": 1.15,
+      "samples": 4011,
+      "stations_reporting": 4
+    },
+    "most_polluted_station": "MIDC Ambad (Industrial Zone)",
+    "total_monitoring_records": 24921
+  }
+}
