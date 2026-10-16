@@ -28,13 +28,15 @@ const pieColors = [
 ];
 
 function Dashboard() {
+  const AVAILABLE_YEARS = [2026, 2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016];
   const [lulcData, setLulcData] = useState([]);
   const [source, setSource] = useState(null);
   const [areaData, setAreaData] = useState([]);
   const [trendData, setTrendData] = useState([]);
   const [selectedArea, setSelectedArea] = useState("Nashik NMC");
-  const [trendRange, setTrendRange] = useState("1y");
+  const [selectedTrendYear, setSelectedTrendYear] = useState("2026");
   const [trendStation, setTrendStation] = useState("all");
+  const [yearSummary, setYearSummary] = useState(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -76,18 +78,13 @@ function Dashboard() {
       }
     };
 
-    const loadTrend = async (rangeVal = trendRange, stationVal = trendStation) => {
+    const loadTrend = async (yearVal = selectedTrendYear, stationVal = trendStation) => {
       try {
-        const params = {};
-        if (rangeVal && rangeVal !== "all") {
-          params.period = rangeVal;
-        } else if (rangeVal === "all") {
-          params.period = "all";
-        }
+        const params = { year: yearVal };
         if (stationVal && stationVal !== "all") {
           params.station = stationVal;
         }
-        const trendRes = rangeVal === "1y" && stationVal === "all" ? await aqiService.getTrend() : await aqiService.getTrend(params);
+        const trendRes = await aqiService.getTrend(params);
         const payload = Array.isArray(trendRes?.data)
           ? trendRes.data
           : Array.isArray(trendRes?.data?.data)
@@ -97,6 +94,7 @@ function Dashboard() {
         if (!cancelled) {
           if (payload.length === 0) {
             setTrendData([]);
+            setYearSummary(null);
             return;
           }
 
@@ -107,13 +105,40 @@ function Dashboard() {
             aqi: Number(item.aqi ?? item.value ?? 0),
             pm25: item.pm25,
             pm10: item.pm10,
+            no2: item.no2,
+            so2: item.so2,
+            status: item.status,
           }));
           setTrendData(normalizedTrend);
+
+          if (trendRes?.year_summary) {
+            setYearSummary(trendRes.year_summary);
+          } else {
+            const valid = normalizedTrend.filter((p) => p.aqi > 0);
+            if (valid.length > 0) {
+              const avg = Math.round(valid.reduce((acc, c) => acc + c.aqi, 0) / valid.length);
+              const minPt = [...valid].sort((a, b) => a.aqi - b.aqi)[0];
+              const maxPt = [...valid].sort((a, b) => b.aqi - a.aqi)[0];
+              setYearSummary({
+                year: Number(yearVal),
+                avg_aqi: avg,
+                status: avg <= 50 ? "Good" : avg <= 100 ? "Satisfactory" : avg <= 200 ? "Moderate" : "Poor",
+                min_month: minPt.month,
+                min_aqi: minPt.aqi,
+                max_month: maxPt.month,
+                max_aqi: maxPt.aqi,
+                months_count: payload.length,
+              });
+            } else {
+              setYearSummary(null);
+            }
+          }
         }
       } catch (err) {
         console.error("Dashboard AQI trend load failed:", err);
         if (!cancelled) {
           setTrendData([]);
+          setYearSummary(null);
         }
       }
     };
@@ -131,7 +156,7 @@ function Dashboard() {
       window.clearInterval(areaIntervalId);
       window.clearInterval(trendIntervalId);
     };
-  }, [trendRange, trendStation]);
+  }, [selectedTrendYear, trendStation]);
 
   useEffect(() => {
     if (areaData.length > 0 && !areaData.some((area) => area.area === selectedArea)) {
@@ -300,55 +325,112 @@ function Dashboard() {
 
           <div className="panel-header" style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "0.75rem" }}>
             <div>
-              <h2>AQI Trend</h2>
+              <h2>AQI Trend — Year {selectedTrendYear}</h2>
               <p>
-                {trendRange === "1y" && "Monthly Air Quality Variation (2025–2026)"}
-                {trendRange === "3y" && "3-Year Environmental Trajectory (2024–2026)"}
-                {trendRange === "all" && "10-Year Decadal MPCB Trend (2016–2026)"}
+                Month-by-month air quality index across whole year {selectedTrendYear} ({trendData.length} months available)
               </p>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
-              <div style={{ display: "flex", background: "rgba(255,255,255,0.06)", borderRadius: "8px", padding: "2px" }}>
-                {[
-                  { id: "1y", label: "1 Year" },
-                  { id: "3y", label: "3 Years" },
-                  { id: "all", label: "All 10 Years" },
-                ].map((btn) => (
-                  <button
-                    key={btn.id}
-                    type="button"
-                    onClick={() => setTrendRange(btn.id)}
-                    style={{
-                      padding: "0.28rem 0.65rem",
-                      fontSize: "0.72rem",
-                      borderRadius: "6px",
-                      border: "none",
-                      cursor: "pointer",
-                      background: trendRange === btn.id ? "#f97316" : "transparent",
-                      color: trendRange === btn.id ? "#ffffff" : "#94a3b8",
-                      fontWeight: 600,
-                      transition: "all 0.15s ease",
-                    }}
-                  >
-                    {btn.label}
-                  </button>
-                ))}
+            <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
+                <label htmlFor="year-select" style={{ fontSize: "0.78rem", color: "#94a3b8", fontWeight: 600 }}>
+                  Year:
+                </label>
+                <select
+                  id="year-select"
+                  aria-label="Select Year"
+                  value={selectedTrendYear}
+                  onChange={(e) => setSelectedTrendYear(e.target.value)}
+                  style={{
+                    background: "#1e293b",
+                    color: "#f8fafc",
+                    border: "1px solid #475569",
+                    borderRadius: "6px",
+                    padding: "0.35rem 0.65rem",
+                    fontSize: "0.82rem",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                  }}
+                >
+                  {AVAILABLE_YEARS.map((yr) => (
+                    <option key={yr} value={yr}>
+                      {yr} {yr === 2026 ? "(9 Months)" : yr === 2016 ? "(10 Months)" : "(12 Months)"}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
+                <label htmlFor="trend-station-select" style={{ fontSize: "0.78rem", color: "#94a3b8", fontWeight: 600 }}>
+                  Station:
+                </label>
+                <select
+                  id="trend-station-select"
+                  aria-label="Select Station"
+                  value={trendStation}
+                  onChange={(e) => setTrendStation(e.target.value)}
+                  style={{
+                    background: "#1e293b",
+                    color: "#f8fafc",
+                    border: "1px solid #475569",
+                    borderRadius: "6px",
+                    padding: "0.35rem 0.65rem",
+                    fontSize: "0.82rem",
+                    fontWeight: 500,
+                    cursor: "pointer",
+                  }}
+                >
+                  <option value="all">All Stations (City Average)</option>
+                  <option value="Gangapur Road">Gangapur Road</option>
+                  <option value="Pandav Nagari">Pandav Nagari</option>
+                  <option value="MIDC Ambad">MIDC Ambad</option>
+                  <option value="Hirawadi">Hirawadi</option>
+                </select>
               </div>
 
               <span className="chart-badge">
-                {trendRange === "1y" ? "2025–2026" : trendRange === "3y" ? "2024–2026" : "2016–2026"}
+                {selectedTrendYear}
               </span>
             </div>
           </div>
 
-          {trendData.length > 0 && (
-            <div style={{ display: "flex", gap: "1rem", padding: "0 1.25rem 0.75rem", fontSize: "0.75rem", color: "#94a3b8" }}>
-              <span>Average AQI: <strong style={{ color: "#f97316" }}>{Math.round(trendData.reduce((acc, c) => acc + (c.aqi || 0), 0) / trendData.length)}</strong></span>
+          {/* Quick Year Navigation Pills */}
+          <div style={{ display: "flex", gap: "0.35rem", padding: "0 1.25rem 0.6rem", flexWrap: "wrap", overflowX: "auto" }}>
+            {AVAILABLE_YEARS.map((yr) => {
+              const isActive = String(selectedTrendYear) === String(yr);
+              return (
+                <button
+                  key={yr}
+                  type="button"
+                  onClick={() => setSelectedTrendYear(String(yr))}
+                  style={{
+                    padding: "0.22rem 0.6rem",
+                    fontSize: "0.72rem",
+                    borderRadius: "6px",
+                    border: isActive ? "1px solid #f97316" : "1px solid rgba(255,255,255,0.08)",
+                    background: isActive ? "#f97316" : "rgba(255,255,255,0.03)",
+                    color: isActive ? "#ffffff" : "#94a3b8",
+                    fontWeight: isActive ? 700 : 500,
+                    cursor: "pointer",
+                    transition: "all 0.15s ease",
+                  }}
+                >
+                  {yr}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Year Summary Indicators */}
+          {yearSummary && (
+            <div style={{ display: "flex", gap: "1.2rem", padding: "0 1.25rem 0.75rem", fontSize: "0.75rem", color: "#94a3b8", flexWrap: "wrap", alignItems: "center" }}>
+              <span>Annual Average: <strong style={{ color: "#f97316" }}>{yearSummary.avg_aqi} AQI</strong> ({yearSummary.status})</span>
               <span>•</span>
-              <span>Peak AQI: <strong style={{ color: "#ef4444" }}>{Math.max(...trendData.map((d) => d.aqi || 0))}</strong></span>
+              <span>Cleanest Month: <strong style={{ color: "#22c55e" }}>{yearSummary.min_month} ({yearSummary.min_aqi} AQI)</strong></span>
               <span>•</span>
-              <span>Data Points: <strong style={{ color: "#38bdf8" }}>{trendData.length} Months</strong></span>
+              <span>Peak Month: <strong style={{ color: "#ef4444" }}>{yearSummary.max_month} ({yearSummary.max_aqi} AQI)</strong></span>
+              <span>•</span>
+              <span>Data Points: <strong style={{ color: "#38bdf8" }}>{yearSummary.months_count} Months Monitored</strong></span>
             </div>
           )}
 

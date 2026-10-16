@@ -479,14 +479,24 @@ def get_aqi_trend(period=None, station=None, pollutant=None, year=None, days=Non
     else:
         series = _CACHED_MONTHLY.get("overall", [])
 
-    # Filter by year if requested
+    available_years = [2026, 2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016]
+    year_summary = None
+
+    # Calculate month coverage per year for the selected station
+    month_coverage = {}
+    for yr in available_years:
+        yr_pts = [p for p in series if p.get("year") == yr and p.get("aqi", 0) > 0]
+        month_coverage[str(yr)] = len(yr_pts)
+
+    # Filter by year if requested (or default if no other filter is set)
+    effective_year = None
     if year:
         try:
             yr_int = int(year)
-            series = [pt for pt in series if pt.get("year") == yr_int]
+            effective_year = yr_int
+            series = [pt for pt in series if pt.get("year") == yr_int and pt.get("aqi", 0) > 0]
         except ValueError:
             pass
-    # Filter by period or days
     elif period:
         p = period.lower().strip()
         if p == "1y":
@@ -500,9 +510,44 @@ def get_aqi_trend(period=None, station=None, pollutant=None, year=None, days=Non
         months_limit = max(1, int(days / 30))
         series = series[-months_limit:]
     else:
-        # Default: if no param provided, return full series or last 36 months if caller expects default
-        # For Dashboard backwards-compat, return all available points so client can view multi-year
-        series = series
+        # Default: default to latest year (2026) for clean year-wise display
+        effective_year = 2026
+        series = [pt for pt in series if pt.get("year") == 2026 and pt.get("aqi", 0) > 0]
+
+    # Enrich data points with short_month and numeric values
+    formatted_series = []
+    for pt in series:
+        m_str = pt.get("month", "")
+        # extract short month e.g. "Jan" from "Jan 2024"
+        short_m = m_str.split()[0] if m_str else pt.get("date", "")[:7]
+        formatted_series.append({
+            **pt,
+            "short_month": short_m,
+            "month_label": f"{short_m} {pt.get('year', '')}".strip(),
+            "aqi": int(pt.get("aqi", 0)),
+            "pm25": round(float(pt.get("pm25", 0)), 1),
+            "pm10": round(float(pt.get("pm10", 0)), 1),
+            "no2": round(float(pt.get("no2", 0)), 1),
+            "so2": round(float(pt.get("so2", 0)), 1),
+            "co": round(float(pt.get("co", 0)), 2),
+        })
+
+    if effective_year and formatted_series:
+        valid_aqis = [pt["aqi"] for pt in formatted_series if pt.get("aqi", 0) > 0]
+        if valid_aqis:
+            avg_aqi = round(sum(valid_aqis) / len(valid_aqis))
+            min_pt = min([pt for pt in formatted_series if pt.get("aqi", 0) > 0], key=lambda x: x["aqi"])
+            max_pt = max(formatted_series, key=lambda x: x.get("aqi", 0))
+            year_summary = {
+                "year": effective_year,
+                "avg_aqi": avg_aqi,
+                "status": _aqi_status_for_value(avg_aqi),
+                "min_month": min_pt.get("month") or min_pt.get("short_month"),
+                "min_aqi": min_pt.get("aqi"),
+                "max_month": max_pt.get("month") or max_pt.get("short_month"),
+                "max_aqi": max_pt.get("aqi"),
+                "months_count": len(formatted_series),
+            }
 
     yearly_data = _CACHED_YEARLY.get("overall", []) if _CACHED_YEARLY else []
     station_comp = _CACHED_YEARLY.get("station_comparison", []) if _CACHED_YEARLY else []
@@ -511,8 +556,12 @@ def get_aqi_trend(period=None, station=None, pollutant=None, year=None, days=Non
     return {
         "source": "station_csv",
         "station": station or "All Stations (City Average)",
-        "period": period or "all",
-        "data": series,
+        "period": period or ("year" if effective_year else "all"),
+        "selected_year": effective_year,
+        "available_years": available_years,
+        "month_coverage": month_coverage,
+        "year_summary": year_summary,
+        "data": formatted_series,
         "yearly": yearly_data,
         "station_comparison": station_comp,
         "summary": summary_stats,
